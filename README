@@ -1,0 +1,119 @@
+Hi, this is version 1.03 of w3ng.
+
+Thanks for taking the time to have a look at it. It's far from perfect, so
+don't be suprised if things break, but please let me know what does break.
+
+Ok, quick usage. First, stick w3ng into your /cgi-bin/ directory (or,
+the directory that looks like /cgi-bin/ to the outside world). In a Web page, 
+do the following:
+
+<A HREF="/cgi-bin/w3ng?/dos/c/eh/myguide.ng+-menu">
+     This is my test Norton Guide</A>
+
+And away you go (I hope, works for me etc... <g>).
+
+Ok, here are some of the things that are not perfect yet or that I need
+other people to test and give me feedback with:
+
+o Test it with as many NGs as possible.
+
+o w3ng does some very rough low and high PC character translation. I did
+  it in a rush so it's not going to look perfect. I will sit down and
+  design the box character to ASCII chaarcter mapping, plus some other
+  "special" picture characters, later.
+	
+o The source is partly ripped off from a NG reader I was writing for OS/2.
+  Because of this it's possibly not optimized for the job in hand, please
+  excuse the code at the moment (possibly some left over vars, very few
+  comments etc..).
+
+o My knowledge of HTML is not great. If you see any problems with the
+  resulting HTML then please let me know.
+
+o As far as I can tell, the source should compile clean with GCC under
+  Linux, GCC under OS/2 (GCC/EMX), GCC under Dos (DJGPP) and Borland
+  under Dos. If you find otherwise, or you find another compiler/OS
+  that it either a) works with or b) you've made it work with then
+  please let me know.
+
+o There is no Makefile as yet. You should know how to compile, but, for
+  those who don't, I've used:
+
+	Linux
+		gcc w3ng.c cfgfile.c -o w3ng
+	OS/2 (EMX)
+		gcc w3ng.c cfgfile.c -o w3ng.exe
+	Dos (DJGPP)
+		gcc w3ng.c cfgfile.c -o w3ng.out
+		strip w3ng.out
+		coff2exe w3ng.out
+	Dos (Borland)
+		bcc w3ng.c cfgfile.c
+
+o I've now added a -href parameter to help create index pages on the fly.
+  For example, on my server I've got a (quick and dirty) bash script as
+  follows:
+
+	#!/bin/sh
+
+	echo Content-type: text/html
+	echo
+	echo
+	echo "<HTML><HEAD><TITLE>Directory Of Norton Guide Files</TITLE>
+	echo "</HEAD>"
+	echo "<BODY>"
+	echo "<UL>"
+	for ng_file in /dos/c/eh/*.ng
+	do
+		echo "<LI>$(w3ng $ng_file -href)"
+	done
+	echo "</UL></BODY></HTML>"
+
+o w3ng now has a config file to allow you to control some HTML elements.
+  To set the location of the config file edit the #define CONFIG_FILE
+  that is close the top of the source. Make sure you make this the
+  full name of the file and not just a point to it's location or anything.
+
+  Currently, the following options are available:
+
+  BODY=
+  -----
+
+  Use this to specify your own <BODY> element. For example, you may want
+  a graphic background to your pages:
+
+        BODY=<BODY BACKGROUND="http://www.trustno1.com/img/scully.gif">
+
+  Note that what you are giving is the *whole* opening body command.
+
+  FRAMES=
+  -------
+
+  If you have a browser that can work with frames (Netscape II for example)
+  you can tell w3ng to work with framed HTML. Set it to anything that starts
+  with Y or y to turn it on:
+
+        FRAMES=yes please!
+
+  FRAMECOLS=
+  ----------
+
+  This lets you specify the split for the frames. The default is 30% for
+  the menu and 70% for the pages. You can set it like:
+
+        FRAMECOLS=30%,70%
+
+  Note that what you set is what will be included in the HTML.
+
+  
+Hmm, I think that is about that for the moment. Any feedback is a good
+thing. If you think it can be improved then let me know. Email your
+feedback to davep@hagbard.demon.co.uk
+
+You may also want to check http://www.acemake.com/hagbard/w3ng.html for
+details of the current version and known problems. 
+
+Also, if you need to convert a NG to a set of HTML documents then you might
+want to look at http://www.acemake.com/hagbard/ng2html.html.
+
+Thanks for your time.
